@@ -40,7 +40,7 @@ app.notification.devices: Subscribed devices
 app.notification.revoke: Revoke
 app.notification.no_devices: No subscribed devices.
 app.notification.test.title: Your notifications are working
-app.notification.test.body: 'Hello %name%! This is a test notification from Skeleton.'
+app.notification.test.body: 'Hello %name%! This is a test notification from KTN Gestión.'
 app.notification.test.users_title: '👥 Your user directory is one click away'
 app.notification.test.users_body: 'Hi %name%! ✨ Open this notification to visit the Users page. 🚀'
 app.notification.test.warning_title: '⚠️ Something needs your attention'

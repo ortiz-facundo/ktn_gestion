@@ -1,13 +1,13 @@
-name: symfony-backoffice-skeleton
+name: ktn_gestion
 
 services:
   php:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: skeleton-php
+    container_name: ktn_gestion-php
     ports:
-      - "8000:80"
+      - "8070:80"
     volumes:
       - ./:/var/www/html
     depends_on:
@@ -20,7 +20,7 @@ services:
 
   database:
     image: mariadb:10.11
-    container_name: skeleton-db
+    container_name: ktn_gestion-db
     environment:
       MARIADB_DATABASE: app
       MARIADB_USER: app
@@ -36,7 +36,7 @@ services:
 
   composer:
     image: composer:2
-    container_name: skeleton-composer
+    container_name: ktn_gestion-composer
     volumes:
       - ./:/app
     working_dir: /app

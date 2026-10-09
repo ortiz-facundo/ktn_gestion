@@ -40,7 +40,7 @@ app.notification.devices: Dispositivos suscritos
 app.notification.revoke: Revocar
 app.notification.no_devices: No hay dispositivos suscritos.
 app.notification.test.title: Tus notificaciones funcionan
-app.notification.test.body: '¡Hola, %name%! Esta es una notificación de prueba de Skeleton.'
+app.notification.test.body: '¡Hola, %name%! Esta es una notificación de prueba de KTN Gestión.'
 app.notification.test.users_title: '👥 Tu directorio de usuarios está a un clic'
 app.notification.test.users_body: '¡Hola, %name%! ✨ Abre esta notificación para visitar la página de usuarios. 🚀'
 app.notification.test.warning_title: '⚠️ Hay algo que requiere tu atención'

@@ -200,7 +200,7 @@ while (ob_get_level() > 0) {
 }
 @ob_implicit_flush(true);
 
-echo "=== symfony-backoffice-skeleton deploy installer ===\n";
+echo "=== ktn_gestion deploy installer ===\n";
 echo "Project dir: {$projectDir}\n";
 echo "PHP: " . PHP_VERSION . "\n";
 echo "Time: " . date('c') . "\n";

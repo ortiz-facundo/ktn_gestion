@@ -1,15 +1,18 @@
-# AGENTS.md — Symfony Backoffice Skeleton
+# AGENTS.md — Ketten / KTN Gestión
 
 > Project context for AI coding assistants (Claude Code, Aider, Cursor, etc.).
-> Read this first. Update freely as the skeleton evolves — this is the
+> Read this first. Update freely as the project evolves — this is the
 > project's living rulebook, not a read-only artifact.
 
 ---
 
 ## TL;DR
 
-- **Reusable Symfony backoffice base.** No public homepage — `GET /`
-  redirects to `/login`.
+- **KTN Gestión** — administration system for **Ketten**, an event
+  production company. Downstream of `symfony-backoffice-skeleton`
+  (remote `skeleton`); no public homepage — `GET /` redirects to `/login`.
+  Business modules (events, clients, suppliers, staff, budgets, …) are added
+  on top of the shared backoffice architecture, never inside its shared modules.
 - Stack: **PHP 8.4**, **Apache 2.4** (single container), **MariaDB 10.11**,
   **Vite 5**, **Tailwind 3.4**, **Doctrine ORM** (attribute mapping), Symfony
   form login + stateless CSRF + login throttling. **Dev/prod parity** — the
@@ -20,22 +23,18 @@
   (sidecar, `profile=tools`, never auto-starts). Frontend assets build on
   the host with `npm run build` / `npm run dev`.
 - No host PHP, no host Composer, no host MariaDB — only Docker.
+- Dev endpoints (chosen not to collide with the other projects): app
+  `http://localhost:8070`, DB `127.0.0.1:33096`, Mailpit SMTP `1075` /
+  UI `http://localhost:8075`, Vite `5193`. Compose project `ktn_gestion`.
 - Authenticated **backoffice** gated by RBAC. Login at `/login`,
   dashboard at `/dashboard`, user/role/permission CRUD under `/admin/...`,
   self-service at `/account/...`. **No public registration** — admins
   create users via `/admin/users/new`, who confirm via email link.
-- Dev test user: `test@skeleton.local` / `test` (`ROLE_ADMIN`,
+- Dev test user: `test@ketten.local` / `test` (`ROLE_ADMIN`,
   `USER_STATE_ACTIVE`).
-- **Two downstream projects** track this skeleton as a git remote and sync
-  off it via a tag-bounded cherry-pick (see `BRANCHING.md`):
-  - `web-nova-argentum` — a public marketing site for a land-development
-    business. Adds a public homepage, a contact form, and the cPanel
-    deploy tooling.
-  - `sci_gestion` — a general administration system for a textile company
-    (Scachi — Indumentaria Institucional). Today ships the Catalog and
-    Inventory modules; future modules (production, sales, purchasing, HR,
-    accounting, reporting) will be added on the same architecture.
-  See `BRANCHING.md`.
+- **Shared code comes from the skeleton** via a tag-bounded cherry-pick
+  (`skeleton-sync` tag, see `BRANCHING.md`). Reusable improvements made here
+  go back to the skeleton as Engram **skeleton proposals** (see below).
 
 ---
 
@@ -109,12 +108,10 @@ In priority order. If you find yourself about to violate one of these, stop.
     backoffice-only. Downstream projects that need a public homepage should
     override `App\Controller\HomeController` and add their own
     `templates/home/` directory. The skeleton's redirect is the baseline.
-14. **Never rename the skeleton brand strings in the source of truth.**
-    `Skeleton`, `skeleton.local`, `no-reply@skeleton.local`, etc. are the
-    skeleton identity. Downstream projects override them after forking
-    (see `README.md` §"Forking the skeleton"). The skeleton's
-    `test@skeleton.local` test user must remain unchanged — downstreams
-    replace it via `UserFixtures` or an admin override.
+14. **Brand strings are downstream identity.** This project replaced the
+    skeleton placeholders (`Skeleton` → `KTN Gestión`, `skeleton.local` →
+    `ketten.local`, Compose/Apache names → `ktn_gestion` / `ketten-gestion`).
+    When a skeleton sync conflicts on these lines, keep the Ketten values.
 
 ---
 
@@ -257,18 +254,18 @@ npm run build
 
 URLs once running:
 
-- App:               <http://localhost:8000>  (redirects to /login)
-- Login:             <http://localhost:8000/login>
-- Dashboard:         <http://localhost:8000/dashboard>  (auth required)
-- Admin (CRUD):      <http://localhost:8000/admin/users>, `/admin/roles`, `/admin/permissions`
-- Profile:           <http://localhost:8000/account/profile-settings>
-- Mailpit (dev):     <http://localhost:8025>  (SMTP capture UI)
-- Vite:              <http://localhost:5173>  (only when `npm run dev` is running)
-- DB:                `127.0.0.1:33067` from host (loopback only; via `compose.override.yaml`), `database:3306` from inside containers
+- App:               <http://localhost:8070>  (redirects to /login)
+- Login:             <http://localhost:8070/login>
+- Dashboard:         <http://localhost:8070/dashboard>  (auth required)
+- Admin (CRUD):      <http://localhost:8070/admin/users>, `/admin/roles`, `/admin/permissions`
+- Profile:           <http://localhost:8070/account/profile-settings>
+- Mailpit (dev):     <http://localhost:8075>  (SMTP capture UI)
+- Vite:              <http://localhost:5193>  (only when `npm run dev` is running)
+- DB:                `127.0.0.1:33096` from host (loopback only; via `compose.override.yaml`), `database:3306` from inside containers
 
 Test user (dev fixtures, after running the first-time seed):
 
-- email:    `test@skeleton.local`
+- email:    `test@ketten.local`
 - password: `test`
 - role:     `ROLE_ADMIN` (all five permissions)
 
@@ -369,27 +366,20 @@ voter, `getRoles()` still saves you. Either alone is correct.
 
 See `BRANCHING.md` for the full procedure. The short version:
 
-- The skeleton is the **upstream** of the two downstream projects
-  (`web-nova-argentum` and `sci_gestion`). See above for what each adds.
-- Each downstream registers the skeleton as a remote: `git remote add skeleton
-  git@github.com:ortiz-facundo/symfony-backoffice-skeleton.git`.
-- Generic improvements go to the skeleton first, then propagate via a
-  **tag-bounded cherry-pick**: each downstream keeps a `skeleton-sync`
-  tag marking the last skeleton commit it has accounted for, and a sync
-  only replays the commits *after* that tag. Full-history rebase/merge
-  was tried and abandoned once (gestion-nova, 2026-08-31) because the
-  skeleton's later commits were themselves generalized from downstream
-  code, producing large non-substantive conflicts.
-- Skeleton commits that generalize code lifted from a specific downstream
-  carry a `Source: <downstream-name>` trailer in the commit message; that
-  downstream's sync `--skip`s them automatically (it already has the
-  more-specific original).
-- Domain-specific work (public homepage, contact form, catalog, inventory)
-  stays in the downstream.
-
-When you change a shared module in the skeleton, **stop and tell the user**
-that the change needs to be lifted into the downstreams. The user (not the
-agent) decides when to sync.
+- This project is a **downstream** of `symfony-backoffice-skeleton`
+  (sibling folder `../symfony-backoffice-skeleton`, remote `skeleton` →
+  `git@github.com:ortiz-facundo/symfony-backoffice-skeleton.git`).
+  `origin` is `git@github.com:ortiz-facundo/ktn_gestion.git`.
+- Shared code is pulled with a **tag-bounded cherry-pick**: the local
+  `skeleton-sync` tag marks the last skeleton commit already accounted for;
+  a sync only replays `skeleton-sync..skeleton/main`, oldest first. Never
+  rebase/merge the full skeleton history.
+- Skip skeleton commits carrying a `Source: ktn_gestion` trailer — they
+  generalize code that already exists here.
+- Domain-specific work (Ketten business modules, branding) stays here.
+- Don't fix shared modules only here when the fix is generic: implement it
+  here if needed, then record a skeleton proposal. Git mutations (commits,
+  tags, pushes, syncs) require explicit user authorization.
 
 ---
 
@@ -444,7 +434,7 @@ Change the state with `mem_update` on the proposal's id, replacing the
 `**State**:` line (`find: "**State**: pending"`, `replace: "**State**:
 discarded (…)"`). Only `pending` proposals show up in reviews.
 
-### Reviewing proposals (skeleton)
+### Reviewing proposals (skeleton — not from this repo)
 
 - **With an agent:** run `/skeleton-proposals` in a session opened in the
   skeleton repo. It lists every pending proposal from all downstreams, walks
@@ -728,7 +718,7 @@ docker compose exec php bin/console lint:twig templates/
 
 [Mailpit](https://github.com/axllent/mailpit) is the dev SMTP catcher.
 Configured in `compose.override.yaml` as the `mailer` service: SMTP on
-`mailer:1025`, web UI on `http://localhost:8025`. Auth accepts anything
+`mailer:1025`, web UI on `http://localhost:8075`. Auth accepts anything
 (`MP_SMTP_AUTH_ACCEPT_ANY=1`), so no credentials needed.
 
 - `.env.dev` defaults `MAILER_DSN=smtp://mailer:1025`. Override per-dev
@@ -1083,17 +1073,17 @@ the icon map location).
 - **`/docker/` and `/apache/` are in the build context.** They MUST NOT be
   in `.dockerignore`. This is the most easily-forgotten rule.
 - **MariaDB DSN host differs by environment.** `database:3306` from
-  inside containers (Docker service name), `127.0.0.1:33067` from the host
+  inside containers (Docker service name), `127.0.0.1:33096` from the host
   (mapped via `compose.override.yaml` so a host MariaDB on `:3306` won't
   collide). The DSN in `.env` uses `database` because Symfony only reads
-  it from inside the container; from the host use `127.0.0.1:33067`.
+  it from inside the container; from the host use `127.0.0.1:33096`.
 - **CSRF gotcha.** Symfony's `SameOriginCsrfTokenManager` is enabled
   by default. The HTML the server renders contains the literal string
   `value="csrf-token"` in the hidden CSRF input — **this is the
   placeholder, not a real token.** Real validation is done via `Origin`
   / `Referer` headers and a cookie double-submit. If you write a curl
-  test for a POST, send `-H "Origin: http://localhost:8000" -H
-  "Referer: http://localhost:8000/login"`, otherwise the firewall will
+  test for a POST, send `-H "Origin: http://localhost:8070" -H
+  "Referer: http://localhost:8070/login"`, otherwise the firewall will
   reject the request. A regular browser sends these headers automatically.
 - **`User` table is `app_user`, not `user`.** Both PostgreSQL (the
   original target) and MariaDB (`user` is the built-in account-management
@@ -1109,7 +1099,7 @@ the icon map location).
   `POST_SUBMIT` listener that diffs the chosen roles. Follow the same
   pattern for new forms that bind to User's roles.
 - **`/account/confirm` link is generated against `APP_URL`.** In `.env.local`
-  the dev value is `http://localhost:8000`. If you change the host port
+  the dev value is `http://localhost:8070`. If you change the host port
   (e.g. for sci_gestion's `+10` port shift), update `APP_URL` accordingly,
   otherwise the confirmation emails will point at the wrong port.
 - **Skeleton identity placeholders** — `Skeleton`, `skeleton.local`,

@@ -11,7 +11,7 @@ deny() {
 
 case "$tool_name" in
   Edit|Write|NotebookEdit)
-    deny "Blocked: the planner does not edit files directly. Delegate this to the builder instead: herdr agent prompt skeleton-builder \"<concrete task description>\" --wait --timeout 120000. See HARNESS.md."
+    deny "Blocked: the planner does not edit files directly. Delegate this to the builder instead: herdr agent prompt ktn-builder \"<concrete task description>\" --wait --timeout 120000. See HARNESS.md."
     ;;
   Bash)
     command="$(jq -r '.tool_input.command // empty' <<<"$payload")"
@@ -20,7 +20,7 @@ case "$tool_name" in
         exit 0
         ;;
       *)
-        deny "Blocked: the planner does not run write/build commands itself (only read-only inspection and \`herdr agent ...\`). Delegate execution to the builder: herdr agent prompt skeleton-builder \"<concrete task description>\" --wait --timeout 120000. See HARNESS.md."
+        deny "Blocked: the planner does not run write/build commands itself (only read-only inspection and \`herdr agent ...\`). Delegate execution to the builder: herdr agent prompt ktn-builder \"<concrete task description>\" --wait --timeout 120000. See HARNESS.md."
         ;;
     esac
     ;;

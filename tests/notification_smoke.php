@@ -23,10 +23,10 @@ $check = static function (bool $condition, string $message): void {
     if (!$condition) { throw new RuntimeException($message); }
     print 'PASS '.$message.PHP_EOL;
 };
-$user = $em->getRepository(App\Entity\Administration\User::class)->findOneBy(['email' => 'test@skeleton.local']);
+$user = $em->getRepository(App\Entity\Administration\User::class)->findOneBy(['email' => 'test@ketten.local']);
 if ($user === null) { throw new RuntimeException('Load development fixtures first.'); }
 $other = new App\Entity\Administration\User();
-$other->setEmail('notification-smoke-'.bin2hex(random_bytes(6)).'@skeleton.local');
+$other->setEmail('notification-smoke-'.bin2hex(random_bytes(6)).'@ketten.local');
 $other->setState(App\Entity\Administration\User::USER_STATE_ACTIVE);
 $initial = $inbox->count($user);
 $initialArchived = $inbox->count($user, archived: true);

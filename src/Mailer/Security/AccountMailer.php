@@ -31,7 +31,7 @@ final class AccountMailer
     {
         $locale = $this->localeFor($user);
         $email = (new TemplatedEmail())
-            ->from(new Address($_ENV['MAILER_FROM'] ?? 'no-reply@example.com', $_ENV['MAILER_FROM_NAME'] ?? 'Skeleton'))
+            ->from(new Address($_ENV['MAILER_FROM'] ?? 'no-reply@example.com', $_ENV['MAILER_FROM_NAME'] ?? 'Ketten'))
             ->to(new Address($user->getEmail(), $user->getName() ?? $user->getEmail()))
             ->subject($this->translator->trans('email.confirmation.subject', [], null, $locale))
             ->locale($locale)
@@ -51,7 +51,7 @@ final class AccountMailer
     {
         $locale = $this->localeFor($user);
         $email = (new TemplatedEmail())
-            ->from(new Address($_ENV['MAILER_FROM'] ?? 'no-reply@example.com', $_ENV['MAILER_FROM_NAME'] ?? 'Skeleton'))
+            ->from(new Address($_ENV['MAILER_FROM'] ?? 'no-reply@example.com', $_ENV['MAILER_FROM_NAME'] ?? 'Ketten'))
             ->to(new Address($user->getEmail(), $user->getName() ?? $user->getEmail()))
             ->subject($this->translator->trans('email.activated.subject', [], null, $locale))
             ->locale($locale)
@@ -66,7 +66,7 @@ final class AccountMailer
     {
         $locale = $this->localeFor($user);
         $email = (new TemplatedEmail())
-            ->from(new Address($_ENV['MAILER_FROM'] ?? 'no-reply@example.com', $_ENV['MAILER_FROM_NAME'] ?? 'Skeleton'))
+            ->from(new Address($_ENV['MAILER_FROM'] ?? 'no-reply@example.com', $_ENV['MAILER_FROM_NAME'] ?? 'Ketten'))
             ->to(new Address($user->getEmail(), $user->getName() ?? $user->getEmail()))
             ->subject($this->translator->trans('email.disabled.subject', [], null, $locale))
             ->locale($locale)

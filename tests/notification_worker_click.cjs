@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const origin = 'http://localhost:8000';
+const origin = 'http://localhost:8070';
 const destination = `${origin}/account/notifications/21/open`;
 
 async function click(windows, target = destination) {

@@ -30,8 +30,8 @@ RUN set -eux; \
     a2enmod rewrite headers; \
     a2dissite 000-default
 
-COPY apache/skeleton.conf /etc/apache2/sites-available/skeleton.conf
-RUN a2ensite skeleton
+COPY apache/ketten-gestion.conf /etc/apache2/sites-available/ketten-gestion.conf
+RUN a2ensite ketten-gestion
 
 COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/zz-opcache.ini
 COPY docker/php/apcu.ini    /usr/local/etc/php/conf.d/apcu.ini

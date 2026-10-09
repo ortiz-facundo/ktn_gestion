@@ -1,6 +1,8 @@
-# Symfony Backoffice Skeleton
+# KTN Gestión
 
-> Reusable Symfony backoffice base — RBAC, auth, i18n, CRUD scaffolding, and cPanel deploy tooling — for downstream projects that need a backoffice without a public homepage.
+> Administration system for **Ketten**, an event production company —
+> built on `symfony-backoffice-skeleton` (RBAC, auth, i18n, CRUD scaffolding,
+> notifications, and cPanel deploy tooling).
 
 [![PHP](https://img.shields.io/badge/PHP-8.4-777BB4)](https://www.php.net)
 [![Symfony](https://img.shields.io/badge/Symfony-7.4-000000)](https://symfony.com)
@@ -9,19 +11,22 @@
 [![Tailwind](https://img.shields.io/badge/Tailwind-3.4-06B6D4)](https://tailwindcss.com)
 [![Apache](https://img.shields.io/badge/Apache-2.4-D22128)](https://httpd.apache.org)
 
-This repository is a **reusable Symfony backoffice base**. It is intentionally
-**backoffice-only**: the root URL redirects to `/login` and there is no public
-homepage. It exists so that downstream projects (e.g. `web-nova-argentum`,
-`sci_gestion`) can track it as a remote and pull in generic improvements
-without re-applying them by hand.
+This repository is a **downstream** of `symfony-backoffice-skeleton`. It is
+backoffice-only: the root URL redirects to `/login`. Shared infrastructure is
+pulled from the skeleton (git remote `skeleton`) through the tag-bounded
+cherry-pick workflow in `BRANCHING.md`; Ketten's business modules live only
+here.
 
-**Downstream projects that ship from this skeleton:**
+| Service | URL / port |
+|---|---|
+| App | <http://localhost:8070> |
+| Mailpit UI / SMTP | <http://localhost:8075> / `1075` |
+| Vite dev server | <http://localhost:5193> |
+| MariaDB (host) | `127.0.0.1:33096` |
+| Test user | `test@ketten.local` / `test` |
 
-- **Nova Argentum** (`web-nova-argentum`) — adds a public marketing site, a contact form, and cPanel deploy tooling.
-- **SCI Gestión** (`sci_gestion`) — general administration system for a textile company (Scachi — Indumentaria Institucional). Today ships the Catalog and Inventory modules; future modules (production, sales, purchasing, HR, accounting, reporting) will be added on the same architecture.
-
-See `BRANCHING.md` for the tag-bounded cherry-pick workflow that keeps the
-two projects in sync with this skeleton.
+The sections below are inherited from the skeleton and apply unchanged unless
+they mention otherwise.
 
 ---
 
@@ -65,20 +70,20 @@ docker compose exec php bin/console app:notifications:vapid-keys
 # Store the printed keys in .env.local, set NOTIFICATION_PUSH_ENABLED=1,
 # and set NOTIFICATION_VAPID_SUBJECT to a valid contact mailto: address.
 # Sign in and enable this device under Account → Notifications.
-docker compose exec php bin/console app:dev:test-notification test@skeleton.local
+docker compose exec php bin/console app:dev:test-notification test@ketten.local
 docker compose exec php bin/console app:notifications:process -v
 # Emoji/click-through demonstration (recipient needs permission to manage users):
-docker compose exec php bin/console app:dev:test-notification test@skeleton.local --users
-docker compose exec php bin/console app:dev:test-notification test@skeleton.local --variant=warning
-docker compose exec php bin/console app:dev:test-notification test@skeleton.local --variant=security
-docker compose exec php bin/console app:dev:test-notification test@skeleton.local --variant=download
+docker compose exec php bin/console app:dev:test-notification test@ketten.local --users
+docker compose exec php bin/console app:dev:test-notification test@ketten.local --variant=warning
+docker compose exec php bin/console app:dev:test-notification test@ketten.local --variant=security
+docker compose exec php bin/console app:dev:test-notification test@ketten.local --variant=download
 docker compose exec php bin/console app:notifications:process -v
 docker compose exec php php tests/notification_smoke.php
 node tests/notification_worker_click.cjs
 ```
 
-Desktop Chrome works on `http://localhost:8000`. Android must access a trusted
-HTTPS origin, not `http://<LAN-IP>:8000`; permission must be granted on the phone.
+Desktop Chrome works on `http://localhost:8070`. Android must access a trusted
+HTTPS origin, not `http://<LAN-IP>:8070`; permission must be granted on the phone.
 No background daemon is started automatically in development: manually run the
 processor to simulate a cron tick. The inbox works with push disabled.
 
@@ -146,19 +151,19 @@ side boring and reusable.
 
 ```mermaid
 flowchart LR
-    Browser[Browser<br/>:8000 / :5173]
+    Browser[Browser<br/>:8070 / :5193]
 
     subgraph dockerHost[Docker host]
         subgraph composeStack[docker compose stack]
-            Apache[php container<br/>php:8.4-apache<br/>:8000 mapped → 80<br/>DocumentRoot /var/www/html/public]
+            Apache[php container<br/>php:8.4-apache<br/>:8070 mapped → 80<br/>DocumentRoot /var/www/html/public]
             MariaDB[(MariaDB 10.11<br/>container<br/>:3306)]
         end
         Composer[composer sidecar<br/>composer:2<br/>profile=tools<br/>runs as host UID]
-        ViteHost[Vite dev server<br/>npm run dev on host<br/>:5173]
+        ViteHost[Vite dev server<br/>npm run dev on host<br/>:5193]
     end
 
-    Browser -->|HTTP :8000| Apache
-    Browser -.->|HMR/WS :5173| ViteHost
+    Browser -->|HTTP :8070| Apache
+    Browser -.->|HMR/WS :5193| ViteHost
     ViteHost -.->|serves<br/>built assets| Apache
     Apache -->|PDO/MySQL| MariaDB
     Composer -.->|bind-mount ./| Apache
@@ -169,12 +174,12 @@ flowchart LR
 
 **Request flow at a glance:**
 
-- **Static asset request in dev** — Vite dev server (host :5173) is reached
+- **Static asset request in dev** — Vite dev server (host :5193) is reached
   directly by the browser via HMR; the Symfony app's rendered HTML still
   points to local Vite URLs via `vite_entry_*_tags()`.
 - **Static asset request in production** — `vite build` writes
   fingerprinted assets into `public/build/`, Apache serves them directly.
-- **App request** — always hits Apache (:8000 → container :80), which routes
+- **App request** — always hits Apache (:8070 → container :80), which routes
   through `public/index.php` (front controller).
 
 ---
@@ -197,8 +202,10 @@ containers.
 ### First-time setup
 
 ```bash
-git clone git@github.com:ortiz-facundo/symfony-backoffice-skeleton.git
-cd symfony-backoffice-skeleton
+git clone git@github.com:ortiz-facundo/ktn_gestion.git
+cd ktn_gestion
+git remote add skeleton git@github.com:ortiz-facundo/symfony-backoffice-skeleton.git
+git fetch skeleton --tags
 docker compose up -d --build    # builds the php image, starts php + db
 ```
 
@@ -219,25 +226,25 @@ files.
 
 ```bash
 # 1. Root URL redirects to /login
-curl -sI http://localhost:8000/ | head -2
+curl -sI http://localhost:8070/ | head -2
 # → HTTP/1.1 302 Found
-# → Location: http://localhost:8000/login
+# → Location: http://localhost:8070/login
 
 # 2. Login page renders
-curl -sI http://localhost:8000/login | head -1
+curl -sI http://localhost:8070/login | head -1
 # → HTTP/1.1 200 OK
 
 # 3. Unauthenticated /dashboard redirects to /login
-curl -sI http://localhost:8000/dashboard | head -2
+curl -sI http://localhost:8070/dashboard | head -2
 # → HTTP/1.1 302 Found
-# → Location: http://localhost:8000/login
+# → Location: http://localhost:8070/login
 
 # 4. MariaDB is reachable from the php container
 docker compose exec php php bin/console doctrine:database:create --if-not-exists
 # → Database "app" for connection named default already exists. Skipped.
 ```
 
-Open <http://localhost:8000> — the browser will land on the login page. This
+Open <http://localhost:8070> — the browser will land on the login page. This
 is the smoke test that confirms Apache routing, Twig rendering, Vite asset
 emission, and Tailwind compilation are all working together.
 
@@ -254,7 +261,7 @@ Log in with the test user:
 
 | Field | Value |
 |---|---|
-| Email | `test@skeleton.local` |
+| Email | `test@ketten.local` |
 | Password | `test` |
 | Role | `ROLE_ADMIN` (all five permissions) |
 
@@ -399,15 +406,15 @@ npm run build
 
 URLs once running:
 
-- App (root): redirects to <http://localhost:8000/login>
-- Login: <http://localhost:8000/login>
-- Dashboard: <http://localhost:8000/dashboard> (auth required)
-- Admin (CRUD): <http://localhost:8000/admin/users>, `/admin/roles`,
+- App (root): redirects to <http://localhost:8070/login>
+- Login: <http://localhost:8070/login>
+- Dashboard: <http://localhost:8070/dashboard> (auth required)
+- Admin (CRUD): <http://localhost:8070/admin/users>, `/admin/roles`,
   `/admin/permissions`
-- Profile: <http://localhost:8000/account/profile-settings>
-- Mailpit (dev): <http://localhost:8025>
-- Vite: <http://localhost:5173> (only when `npm run dev` is running)
-- DB: `127.0.0.1:33067` from host (loopback only; via `compose.override.yaml`),
+- Profile: <http://localhost:8070/account/profile-settings>
+- Mailpit (dev): <http://localhost:8075>
+- Vite: <http://localhost:5193> (only when `npm run dev` is running)
+- DB: `127.0.0.1:33096` from host (loopback only; via `compose.override.yaml`),
   `database:3306` from inside containers
 
 ---

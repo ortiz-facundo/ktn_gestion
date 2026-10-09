@@ -19,27 +19,27 @@ email:
     confirmation:
         subject: 'Welcome — set your password'
         greeting: 'Hello %name%,'
-        intro: 'An administrator created an account for you on Skeleton. Click the button below to set your password and activate your account.'
+        intro: 'An administrator created an account for you on KTN Gestión. Click the button below to set your password and activate your account.'
         cta: 'Set my password'
         expires: 'This link expires in %hours% hours.'
         ignore: 'If you did not expect this email, you can safely ignore it.'
     activated:
-        subject: 'Your Skeleton account is active'
+        subject: 'Your KTN Gestión account is active'
         body: 'Hello %name%, your account is now active. You can sign in from the backoffice login page.'
     disabled:
-        subject: 'Your Skeleton account has been disabled'
-        body: 'Hello %name%, an administrator has disabled your Skeleton account.'
+        subject: 'Your KTN Gestión account has been disabled'
+        body: 'Hello %name%, an administrator has disabled your KTN Gestión account.'
         reason: 'Reason given: %reason%'
 
 # ── Public homepage (optional — only if a downstream project overrides HomeController) ─
 home:
-    title: 'Skeleton — Home'
-    heading: 'Skeleton'
+    title: 'KTN Gestión — Home'
+    heading: 'KTN Gestión'
     subtitle: 'Backoffice online — Apache ✓ Twig ✓ Vite HMR ✓ Tailwind ✓'
 
 # ── Login page (/login) ──────────────────────────────────────────────
 login:
-    page_title: 'Sign in — Skeleton'
+    page_title: 'Sign in — KTN Gestión'
     brand_subtitle: 'Sign in to the backoffice'
     email: 'Email'
     password: 'Password'
@@ -50,7 +50,7 @@ login:
 
 # ── Confirmation page (/account/confirm) ─────────────────────────────
 confirm:
-    page_title: 'Set your password — Skeleton'
+    page_title: 'Set your password — KTN Gestión'
     heading: 'Set your password'
     welcome: 'Welcome, %name%'
     submit: 'Activate my account'
@@ -59,7 +59,7 @@ confirm:
 
 # ── Invalid / expired link page (/account/confirm) ──────────────────
 invalid_link:
-    page_title: 'Invalid link — Skeleton'
+    page_title: 'Invalid link — KTN Gestión'
     heading: 'Invalid or expired link'
     expired: 'This invitation link is invalid, has expired, or has already been used.'
     no_longer_pending: 'Your account is no longer awaiting activation. An administrator may have disabled it.'

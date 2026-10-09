@@ -1,7 +1,28 @@
-# BRANCHING.md — Skeleton workflow
+# BRANCHING.md — KTN Gestión ↔ skeleton workflow
 
-> How the skeleton relates to the downstream projects and how generic
-> improvements flow between them.
+> How this downstream (`ktn_gestion`) relates to `symfony-backoffice-skeleton`
+> and how generic improvements flow between them. The procedure below is the
+> skeleton's own document; "downstream" includes this repository.
+
+## This repository
+
+| Item | Value |
+|---|---|
+| Upstream | `symfony-backoffice-skeleton` — remote `skeleton` → `git@github.com:ortiz-facundo/symfony-backoffice-skeleton.git` |
+| Origin | `git@github.com:ortiz-facundo/ktn_gestion.git` |
+| Created from | `git clone` of skeleton `main` at `32638c3` (2026-10-09) — full skeleton history is shared, so every later skeleton commit cherry-picks cleanly |
+| Sync watermark | local tag `skeleton-sync` (initialized at `32638c3`); push it with `git push origin main skeleton-sync` |
+| Proposal trailer | skeleton commits generalized from this repo carry `Source: ktn_gestion` — skip them on sync |
+| Dev ports | `8070` (PHP) / `33096` (DB) / `1075`+`8075` (Mailpit) / `5193` (Vite) |
+
+Quick sync (details below):
+
+```bash
+git fetch skeleton
+git log skeleton-sync..skeleton/main --oneline --reverse
+git cherry-pick <sha>            # each, oldest first; --skip for Source: ktn_gestion
+git tag -f skeleton-sync skeleton/main
+```
 
 ## Repositories
 
@@ -9,6 +30,7 @@
 |---|---|---|
 | Skeleton (upstream) | `symfony-backoffice-skeleton` | Common code: auth, RBAC, i18n, CRUD base, deploy tooling. No public homepage. |
 | Downstream A | `web-nova-argentum` | Adds a public marketing site, a contact form, and the cPanel deploy tooling. |
+| Downstream C | `ktn_gestion` | Administration system for Ketten, an event production company (this repository). |
 | Downstream B | `sci_gestion` | General administration system for a textile company (Scachi — Indumentaria Institucional). Today ships the Catalog and Inventory modules; future modules will be added on the same architecture. |
 
 The three repos share the commit `4f9d474b65b222dc1b591ff14b8962a77da11b24` ("feat(i18n): full bilingual sweep") as a real git ancestor. Every downstream's `main` is descended from this commit, so skeleton commits are always cherry-pickable into a downstream without `--allow-unrelated-histories`. Downstreams don't replay that whole shared history though — they sync via a bounded, tag-tracked cherry-pick (see "Each downstream pulls it" below); a full-history rebase/merge was tried and abandoned once elsewhere in this family of projects (gestion-nova, 2026-08-31) because skeleton's own later commits were themselves generalized from downstream code, producing large non-substantive conflicts.
@@ -142,6 +164,7 @@ Open the affected surfaces in the browser and confirm the expected behaviour:
 - Skeleton (`http://localhost:8000`) — backoffice login, user CRUD, profile settings.
 - web-nova-argentum (`http://localhost:8020`) — public homepage, contact form, backoffice.
 - sci_gestion (`http://localhost:8010`) — backoffice, catalog, inventory.
+- ktn_gestion (`http://localhost:8070`) — backoffice and Ketten modules.
 
 ## Conflict resolution
 
@@ -160,4 +183,5 @@ If a single commit's conflict is hard to resolve, do the cherry-pick on a scratc
    - Skeleton: `8000` (PHP), `33067` (DB), `1025`+`8025` (Mailpit)
    - web-nova-argentum: `8020` / `33076` / `1045`+`8045`
    - sci_gestion: `8010` / `33066` / `1035`+`8035`
+   - ktn_gestion: `8070` / `33096` / `1075`+`8075` (Vite `5193`)
 3. **Vite assets in `public/build/` are gitignored.** After any change to a Twig template or `assets/scripts/*`, run `npm run build` (or keep `npm run dev` running for HMR). Stale built bundles are a common source of "the button doesn't work" reports.

@@ -5,7 +5,7 @@ node_modules/
 
 # cPanel deploy build artefacts (see scripts/build-cpanel-zip.sh).
 /dist/
-/symfony-backoffice-skeleton-cpanel.zip
+/ktn_gestion-cpanel.zip
 
 ###> symfony/framework-bundle ###
 /.env.local

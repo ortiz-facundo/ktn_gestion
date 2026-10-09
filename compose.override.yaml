@@ -3,20 +3,20 @@ services:
 ###> doctrine/doctrine-bundle ###
   database:
     ports:
-      - "127.0.0.1:33067:3306"
+      - "127.0.0.1:33096:3306"
 ###< doctrine/doctrine-bundle ###
 
 ###> symfony/mailer ###
   # Mailpit is the dev SMTP capture server. Symfony sends to mailer:1025
   # (the docker network DNS name), Mailpit captures every email, and the
-  # web UI is at http://localhost:8025. No credentials needed — Mailpit
+  # web UI is at http://localhost:8075. No credentials needed — Mailpit
   # accepts any AUTH. In prod we use a real SMTP server (separate from
   # this compose file).
   mailer:
     image: axllent/mailpit
     ports:
-      - "1025:1025"   # SMTP (host:container)
-      - "8025:8025"   # Web UI  (host:container)
+      - "1075:1025"   # SMTP (host:container)
+      - "8075:8025"   # Web UI  (host:container)
     environment:
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1

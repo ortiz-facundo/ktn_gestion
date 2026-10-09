@@ -11,8 +11,8 @@
 This repo's Herdr workspace has a tab with a 50/50 left/right split, both
 panes cwd'd into this repo:
 
-- **Left — `skeleton-planner`** (Claude Code)
-- **Right — `skeleton-builder`** (opencode)
+- **Left — `ktn-planner`** (Claude Code)
+- **Right — `ktn-builder`** (opencode)
 
 The names are project-scoped on purpose: agent names in Herdr must be
 unique session-wide, not just per-project, and multiple `claude`/`opencode`
@@ -37,7 +37,7 @@ restarts — so it's not a stale-session or project-specific issue.
 Herdr window too narrow) and launch the builder normally:
 
 ```bash
-herdr agent start skeleton-builder --kind opencode --pane <pane-id>
+herdr agent start ktn-builder --kind opencode --pane <pane-id>
 ```
 
 If the builder pane crashes right after starting, first check its actual
@@ -69,7 +69,7 @@ outright and restricts `Bash` to read-only inspection plus `herdr agent
 delegating instead of silently failing:
 
 ```bash
-herdr agent rename w4:p1 skeleton-planner   # if not already renamed
+herdr agent rename w4:p1 ktn-planner   # if not already renamed
 claude --settings .claude/planner.settings.json --resume <session-id>
 ```
 
@@ -150,14 +150,14 @@ planner hands off work like this:
 
 ```bash
 # 1. Hand off a task and block until the builder settles
-herdr agent prompt skeleton-builder "<concrete task description>" --wait --timeout 120000
+herdr agent prompt ktn-builder "<concrete task description>" --wait --timeout 120000
 
 # 2. Read what the builder actually did/said
-herdr agent read skeleton-builder --source recent-unwrapped --lines 200
+herdr agent read ktn-builder --source recent-unwrapped --lines 200
 
 # 3. If it looks stuck, confirm state explicitly rather than guessing
 #    from --wait timing out:
-herdr agent wait skeleton-builder --until blocked --timeout 30000
+herdr agent wait ktn-builder --until blocked --timeout 30000
 ```
 
 If the builder is `blocked` on an approval or confirmation prompt: the
@@ -166,7 +166,7 @@ the human and waits for an answer. The planner never auto-approves or
 sends a blind confirmation via `agent send-keys`.
 
 Reverse handoff (builder → planner, e.g. the builder hits a scope
-question) uses the same pattern with `skeleton-planner` as the target,
+question) uses the same pattern with `ktn-planner` as the target,
 run from the builder's own pane.
 
 `--timeout` values above are starting points — size them to the task. A
@@ -190,7 +190,7 @@ review/commit."
 - Agent names must be unique **session-wide**, not just per-project. A
   generic `planner`/`builder` pair will collide with another project's
   harness running at the same time — that's why these are named
-  `skeleton-planner`/`skeleton-builder`.
+  `ktn-planner`/`ktn-builder`.
 - `herdr agent prompt` rejects a send into an agent that's currently
   `blocked`. Check `herdr agent get <target>` first, or wait for `idle`.
 - If the builder ever launches a full-screen/alternate-screen TUI (an

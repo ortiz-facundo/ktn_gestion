@@ -13,10 +13,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * Dev seed user. One account is created:
- *   - `test@skeleton.local` / `test` — ROLE_ADMIN. The original test
+ *   - `test@ketten.local` / `test` — ROLE_ADMIN. The original test
  *     user; safe to load in dev and test.
  *
- * The email uses the skeleton.local domain so downstream projects can
+ * The email uses the ketten.local domain so downstream projects can
  * safely re-seed without colliding with production addresses. The
  * fixtures bundle is only registered for dev/test in bundles.php, so
  * this user cannot leak into prod. Override per-project by editing this
@@ -35,7 +35,7 @@ class UserFixtures extends Fixture
     {
         $repo = $manager->getRepository(User::class);
 
-        $this->ensureUser($manager, $repo, email: 'test@skeleton.local', name: 'Test User', password: 'test', roleName: 'ROLE_ADMIN');
+        $this->ensureUser($manager, $repo, email: 'test@ketten.local', name: 'Test User', password: 'test', roleName: 'ROLE_ADMIN');
         $manager->flush();
     }
 

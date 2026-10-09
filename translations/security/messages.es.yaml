@@ -7,27 +7,27 @@ email:
     confirmation:
         subject: 'Bienvenido — define tu contraseña'
         greeting: 'Hola %name%,'
-        intro: 'Un administrador creó una cuenta para ti en Skeleton. Haz clic en el botón de abajo para definir tu contraseña y activar tu cuenta.'
+        intro: 'Un administrador creó una cuenta para ti en KTN Gestión. Haz clic en el botón de abajo para definir tu contraseña y activar tu cuenta.'
         cta: 'Definir mi contraseña'
         expires: 'Este enlace caduca en %hours% horas.'
         ignore: 'Si no esperabas este correo, puedes ignorarlo sin problema.'
     activated:
-        subject: 'Tu cuenta de Skeleton está activa'
+        subject: 'Tu cuenta de KTN Gestión está activa'
         body: 'Hola %name%, tu cuenta ya está activa. Puedes iniciar sesión desde la página de acceso al panel.'
     disabled:
-        subject: 'Tu cuenta de Skeleton ha sido deshabilitada'
-        body: 'Hola %name%, un administrador ha deshabilitado tu cuenta de Skeleton.'
+        subject: 'Tu cuenta de KTN Gestión ha sido deshabilitada'
+        body: 'Hola %name%, un administrador ha deshabilitado tu cuenta de KTN Gestión.'
         reason: 'Motivo indicado: %reason%'
 
 # ── Página de inicio pública (opcional — sólo si un proyecto downstream reemplaza HomeController) ─
 home:
-    title: 'Skeleton — Inicio'
-    heading: 'Skeleton'
+    title: 'KTN Gestión — Inicio'
+    heading: 'KTN Gestión'
     subtitle: 'Panel en línea — Apache ✓ Twig ✓ Vite HMR ✓ Tailwind ✓'
 
 # ── Página de inicio de sesión (/login) ─────────────────────────────
 login:
-    page_title: 'Iniciar sesión — Skeleton'
+    page_title: 'Iniciar sesión — KTN Gestión'
     brand_subtitle: 'Inicia sesión en el panel'
     email: 'Correo electrónico'
     password: 'Contraseña'
@@ -38,7 +38,7 @@ login:
 
 # ── Página de confirmación (/account/confirm) ──────────────────────
 confirm:
-    page_title: 'Define tu contraseña — Skeleton'
+    page_title: 'Define tu contraseña — KTN Gestión'
     heading: 'Define tu contraseña'
     welcome: 'Bienvenido, %name%'
     submit: 'Activar mi cuenta'
@@ -47,7 +47,7 @@ confirm:
 
 # ── Página de enlace inválido (/account/confirm) ────────────────────
 invalid_link:
-    page_title: 'Enlace no válido — Skeleton'
+    page_title: 'Enlace no válido — KTN Gestión'
     heading: 'Enlace no válido o caducado'
     expired: 'Este enlace de invitación no es válido, ha caducado o ya ha sido utilizado.'
     no_longer_pending: 'Tu cuenta ya no está esperando activación. Es posible que un administrador la haya deshabilitado.'

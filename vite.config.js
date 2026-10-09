@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
                 ...(viteDevServerHostname && { viteDevServerHostname }),
                 viteDevServer: {
                     host: '0.0.0.0',
-                    port: 5173,
+                    port: 5193,
                 },
                 stimulus: false,
                 refresh: ['templates/**/*.twig'],
@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
         },
         server: {
             host: '0.0.0.0',
-            port: 5173,
+            port: 5193,
             strictPort: true,
             cors: true,
         },

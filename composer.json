@@ -1,6 +1,6 @@
 {
-    "name": "app/symfony-backoffice-skeleton",
-    "description": "Symfony backoffice skeleton — reusable RBAC, auth, i18n, and CRUD base for downstream projects.",
+    "name": "app/ktn_gestion",
+    "description": "KTN Gestión — administration system for Ketten, an event production company.",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",

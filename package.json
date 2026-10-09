@@ -1,8 +1,8 @@
 {
-  "name": "symfony-backoffice-skeleton",
+  "name": "ktn_gestion",
   "version": "1.0.0",
   "private": true,
-  "description": "Symfony backoffice skeleton — reusable RBAC, auth, i18n, and CRUD base for downstream projects.",
+  "description": "KTN Gestión — administration system for Ketten, an event production company.",
   "type": "module",
   "scripts": {
     "dev": "vite",
